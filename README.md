@@ -8,8 +8,8 @@
 
 # Grupo
 
-- Estudiante 1 (Legajo 1) - correo@estudiante1.com
-- Estudiante 2 (Legajo 2) - correo@estudiante2.com
+- Estudiante 1 (Legajo 1) - cor...@estudiante1.com
+- Estudiante 2 (Legajo 2) - cor...@estudiante2.com
 
 # Contexto / Escenario
 
@@ -20,7 +20,7 @@ necesitan encontrar y asignar artefactos a sus campeones de manera eficiente. Si
 de pergaminos desordenados. Tu misión es diseñar e implementar un sistema robusto que ponga orden en este tesoro de
 reliquias.
 
-# Objetivo de Aprendizaje
+# Objetivo del Laboratorio
 
 - Aplicar el uso de colecciones de Java del Framework `java.util` para gestionar un conjunto de datos.
 - Seleccionar y justificar la estructura de datos más adecuada para resolver problemas específicos (búsqueda, almacenamiento sin duplicados, mapeo clave-valor).
