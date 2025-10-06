@@ -13,49 +13,44 @@
 
 # Contexto / Escenario
 
-En el reino místico de Instanciaveria, la Academia de Hechicería Arcana necesita urgentemente un sistema para catalogar
-y gestionar su vasta colección de artefactos mágicos. Cada artefacto posee un nombre, un nivel de poder (de 1 a 100) y 
-un tipo (ej. "Poción", "Pergamino", "Amuleto", "Varita"). Con el Torneo de los Tres Reinos acercándose, los hechiceros 
-necesitan encontrar y asignar artefactos a sus campeones de manera eficiente. Sin embargo, el sistema actual es un caos 
-de pergaminos desordenados. Tu misión es diseñar e implementar un sistema robusto que ponga orden en este tesoro de
-reliquias.
+¡El Torneo de los Tres Reinos es inminente! La Academia de Hechicería Arcana ha reunido a un concilio de los más grandes artesanos para potenciar su arsenal. Un maestro **Herrero Enano** aplicará su magia rúnica a las _varitas_, y un delicado **Artesano Élfico** es especialista en encantar _amuletos_. Además, un sabio **Escriba Arcano** ha sido convocado para re-inscribir los _pergaminos_ de poder, aunque su magia es volátil y arriesgada. Finalmente, un **Alquimista Experto** está 
+destilando pociones para fortalecer a los campeones, asegurándose de que no excedan los límites mortales.
+
+El sistema actual del `CatalogoArtefactos` es demasiado rígido para manejar estas especialidades. Tu misión es refactorizar el sistema para que pueda colaborar con las distintas **Estrategias de Mejora** sin necesidad de modificar su código interno cada vez que un nuevo artesano se una a la causa.
 
 # Objetivo del Laboratorio
 
-- Aplicar el uso de colecciones de Java del Framework `java.util` para gestionar un conjunto de datos.
-- Seleccionar y justificar la estructura de datos más adecuada para resolver problemas específicos (búsqueda, almacenamiento sin duplicados, mapeo clave-valor).
-- Implementar métodos que operen sobre colecciones para filtrar, agrupar y procesar datos.
-- Practicar la creación de clases con `equals()` y `hashCode()` correctamente implementados.
-- Validar una solución de software utilizando tests unitarios provistos en JUnit 5.
+1. Aplicar el Principio de **Inversión de Control** para desacoplar el `CatalogoArtefactos` de la lógica concreta de mejora.
+2. Implementar el patrón de **Inyección de Dependencias** por constructor para proporcionar al catálogo su estrategia de mejora.
+3. Utilizar interfaces y polimorfismo para crear un sistema flexible y extensible de mejoras de artefactos.
+4. Validar la solución utilizando los tests de `JUnit` provistos, que ahora verificarán tanto el funcionamiento del catálogo como la correcta aplicación de las mejoras.
 
 # Enunciado
 
-Debes desarrollar la clase `CatalogoArtefactos` que gestionará una colección de objetos de tipo `Artefacto`.
+Debes refactorizar y agregar las clases necesarias para manejar los nuevos requisitos.
 
-1. Clase `Artefacto`:
-   - Atributos: nombre (String), poder (int), tipo (¿String?).
-   - Constructor para inicializar todos los atributos.
-   - Métodos getters para todos sus atributos.
-   - Implementación correcta de `equals()` y `hashCode()`: dos artefactos se consideran iguales si tienen el mismo nombre.
-2. Clase `CatalogoArtefactos`:
-   - Debe utilizar internamente una colección para almacenar los artefactos.
-   - **void agregarArtefacto(Artefacto artefacto)**: Añade un nuevo artefacto al catálogo. Si un artefacto con el mismo nombre ya existe, no se debe añadir.
-   - **Set<Artefacto> obtenerArtefactosUnicos()**: Devuelve un conjunto (`Set`) con todos los artefactos del catálogo, garantizando que no haya duplicados.
-   - **List<Artefacto> buscarArtefactosPorTipo(String tipo)**: Devuelve una lista (`List`) de artefactos que coincidan con el tipo especificado. La lista debe estar ordenada de mayor a menor poder.
-   - **Map<String, Integer> contarArtefactosPorTipo()**: Devuelve un mapa (`Map`) donde la clave es el tipo de artefacto y el valor es la cantidad de artefactos de ese tipo existentes en el catálogo.
-   - **Artefacto obtenerArtefactoMasPoderoso()**: Devuelve el artefacto con el mayor nivel de poder. Si hay varios con el mismo poder máximo, puede devolver cualquiera de ellos. Si el catálogo está vacío, debe devolver `null`.
+1.  **Crear la Abstracción (El Contrato):**
+    *   Define una nueva interfaz llamada `EstrategiaDeMejora`.
+    *   Esta interfaz debe tener un único método: `void mejorar(Artefacto artefacto)`.
 
-# Requerimientos Específicos
+2.  **Crear las Implementaciones Concretas (Los Especialistas):**
+    *   Implementa una clase `ForjadorDeRunas` que aplique la interfaz `EstrategiaDeMejora`. Su lógica de `mejorar` será: si el artefacto es de tipo "Varita", incrementa su poder en 15 puntos.
+    *   Implementa una clase `JoyeroElfico` que también aplique `EstrategiaDeMejora`. Su lógica será: si el artefacto es de tipo "Amuleto", y su poder es menor a 50, duplica su poder. Si es mayor o igual a 50, lo incrementa en un 25%.
+    *   Implementa una clase `EscribaArcano` que aplique `EstrategiaDeMejora`. Su lógica de `mejorar` es arriesgada: si el artefacto es de tipo "Pergamino" y su poder es menor a 30, incrementa su poder en 25. Si su poder es 30 o más, el encantamiento es inestable y pierde 10 puntos de poder.
+    *   Implementa una clase `AlquimistaExperto` que aplique `EstrategiaDeMejora`. Su lógica de `mejorar` es cuidadosa: si el artefacto es de tipo "Poción", incrementa su poder en 20 puntos, pero **sin que el nivel de poder final supere los 100**. (Ej: si una poción tiene 85 de poder, su nuevo poder será 100, no 105).
 
-1. **Clase `Artefacto`**: Debe implementar `equals()` y `hashCode()` basándose únicamente en el atributo `nombre`.
-2. **Clase `CatalogoArtefactos`**:
-    - Para almacenar los artefactos, debes usar una colección que evite duplicados de forma natural. Se sugiere un `HashSet`.
-    - El método `buscarArtefactosPorTipo` debe ser eficiente. No se permite simplemente iterar sobre toda la colección si existen formas más óptimas de estructurar los datos.
-    - El método `contarArtefactosPorTipo` debe ser resuelto de manera clara y concisa.
-3. No se permite el uso de librerías externas, a excepción de `java.util.*` y JUnit 5 para las pruebas.
-4. Se deben seguir las convenciones de nomenclatura de Java (camelCase para métodos y variables, PascalCase para clases).
+3.  **Refactorizar `CatalogoArtefactos` (El Cliente):**
+    *   Modifica la clase `CatalogoArtefactos` para que reciba en su constructor un objeto de tipo `EstrategiaDeMejora`.
+    *   Almacena esta estrategia en un campo privado. El catálogo ya no debe crear, conocer ni depender de ninguna clase de mejora concreta.
+    *   Añade un nuevo método público al catálogo: `void aplicarMejoras()`. Este método debe recorrer **todos** los artefactos del catálogo y aplicarles la estrategia de mejora que recibió en el constructor.
+
+4.  **Validar con Pruebas:**
+    *   El repositorio incluye un archivo `CatalogoMejoradoTest.java` con tests que están diseñados para fallar al principio.
+    *   Estos tests crearán instancias del `CatalogoArtefactos` inyectándole las diferentes estrategias (`ForjadorDeRunas`, `JoyeroElfico`) y verificarán que los artefactos se modifican correctamente después de llamar a `aplicarMejoras()`.
+    *   Tu objetivo es escribir el código necesario para que todos los tests pasen a verde.
+
 
 ### Restricciones de Tiempo y Forma de Entrega
 
-- **Duración**: 2.5 horas. (Hasta las 21 Hs)
+- **Duración**: 2 horas. (Hasta las 21 Hs)
 - **Entrega**: Al finalizar la clase, debe realizar un *Pull Request* al repositorio oficial *forkeado* originalmente.

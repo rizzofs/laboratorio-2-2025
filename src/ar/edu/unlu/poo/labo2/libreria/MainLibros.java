@@ -1,4 +1,4 @@
-package ar.edu.unlu.poo.labo1.libreria;
+package ar.edu.unlu.poo.labo2.libreria;
 
 import java.util.*;
 
