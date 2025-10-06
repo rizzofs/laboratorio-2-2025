@@ -12,9 +12,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-/**
- * IMPORTANTE: NO SE DEBE MODIFICAR ESTA CLASE.
- */
 @DisplayName("Tests del Catálogo de Artefactos Mejorado")
 class CatalogoMejoradoTest {
 
